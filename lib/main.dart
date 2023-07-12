@@ -20,6 +20,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late double dollar;
+  late double euro;
+
+  final TextEditingController _real = TextEditingController();
+  final TextEditingController _dolar = TextEditingController();
+  final TextEditingController _euro = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +67,58 @@ class _HomeState extends State<Home> {
                   ),
                 );
               } else {
-                return Container();
+                dollar = snapshot.data!["results"]["currencies"]["USD"]["buy"];
+                euro = snapshot.data!["results"]["currencies"]["EUR"]["buy"];
+
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const Text('Valores convertidos em tempo real',
+                            style: TextStyle(
+                              fontSize: 22,
+                            )),
+                        const SizedBox(height: 36,),
+                        TextField(
+                          controller: _real,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            labelText: 'Real',
+                            labelStyle: TextStyle(color: Colors.black),
+                            prefixText: 'R\$ ',
+                            prefixStyle: TextStyle(color: Colors.black),
+                          ),
+                          style: const TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                        const SizedBox(height: 24,),
+                        TextField(
+                          controller: _dolar,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            labelText: 'Dolar',
+                            labelStyle: TextStyle(color: Colors.black),
+                            prefixText: 'U\$ ',
+                            prefixStyle: TextStyle(color: Colors.black),
+                          ),
+                          style: const TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                        const SizedBox(height: 24,),
+                        TextField(
+                          controller: _euro,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            labelText: 'Euro',
+                            labelStyle: TextStyle(color: Colors.black),
+                            prefixText: '€ ',
+                            prefixStyle: TextStyle(color: Colors.black),
+                          ),
+                          style: const TextStyle(color: Colors.black, fontSize: 20),
+                        )
+                      ],
+                    ),
+                  ),
+                );
               }
           }
         },
