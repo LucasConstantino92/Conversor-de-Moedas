@@ -22,10 +22,24 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late double dollar;
   late double euro;
+  late double pound;
+  late double pesoArgentino;
 
   final TextEditingController _real = TextEditingController();
   final TextEditingController _dolar = TextEditingController();
   final TextEditingController _euro = TextEditingController();
+  final TextEditingController _pound = TextEditingController();
+  final TextEditingController _pesoArgentino = TextEditingController();
+
+  void _realChanged() {}
+
+  void _dollarChanged() {}
+
+  void _euroChaged() {}
+
+  void _poundChanged() {}
+
+  void _pesoChanged() {}
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +83,9 @@ class _HomeState extends State<Home> {
               } else {
                 dollar = snapshot.data!["results"]["currencies"]["USD"]["buy"];
                 euro = snapshot.data!["results"]["currencies"]["EUR"]["buy"];
+                pound = snapshot.data!["results"]["currencies"]["GBP"]["buy"];
+                pesoArgentino =
+                    snapshot.data!["results"]["currencies"]["ARS"]["buy"];
 
                 return SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
@@ -79,42 +96,19 @@ class _HomeState extends State<Home> {
                             style: TextStyle(
                               fontSize: 22,
                             )),
-                        const SizedBox(height: 36,),
-                        TextField(
-                          controller: _real,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Real',
-                            labelStyle: TextStyle(color: Colors.black),
-                            prefixText: 'R\$ ',
-                            prefixStyle: TextStyle(color: Colors.black),
-                          ),
-                          style: const TextStyle(color: Colors.black, fontSize: 20),
-                        ),
-                        const SizedBox(height: 24,),
-                        TextField(
-                          controller: _dolar,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Dolar',
-                            labelStyle: TextStyle(color: Colors.black),
-                            prefixText: 'U\$ ',
-                            prefixStyle: TextStyle(color: Colors.black),
-                          ),
-                          style: const TextStyle(color: Colors.black, fontSize: 20),
-                        ),
-                        const SizedBox(height: 24,),
-                        TextField(
-                          controller: _euro,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Euro',
-                            labelStyle: TextStyle(color: Colors.black),
-                            prefixText: '€ ',
-                            prefixStyle: TextStyle(color: Colors.black),
-                          ),
-                          style: const TextStyle(color: Colors.black, fontSize: 20),
-                        )
+                        const SizedBox(height: 36),
+                        buildTextField('Real', 'R\$ ', _real, _realChanged),
+                        const SizedBox(height: 24),
+                        buildTextField(
+                            'Dólar', 'US\$ ', _dolar, _dollarChanged),
+                        const SizedBox(height: 24),
+                        buildTextField('Euro', '€ ', _euro, _euroChaged),
+                        const SizedBox(height: 24),
+                        buildTextField(
+                            'Libra Esterlina', '£ ', _pound, _poundChanged),
+                        const SizedBox(height: 24),
+                        buildTextField('Peso Argentino', 'AR\$ ',
+                            _pesoArgentino, _pesoChanged)
                       ],
                     ),
                   ),
@@ -130,4 +124,20 @@ class _HomeState extends State<Home> {
 Future<Map> getData() async {
   http.Response response = await http.get(url);
   return json.decode(response.body);
+}
+
+Widget buildTextField(String label, String prefix,
+    TextEditingController controller, Function function) {
+  return TextField(
+    controller: controller,
+    keyboardType: TextInputType.number,
+    decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.black),
+        prefixText: prefix,
+        prefixStyle: const TextStyle(color: Colors.black),
+        border: OutlineInputBorder()),
+    style: const TextStyle(color: Colors.black, fontSize: 20),
+    onChanged: function(),
+  );
 }
